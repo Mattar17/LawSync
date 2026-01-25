@@ -1,0 +1,60 @@
+{
+  "name": "lawsync",
+  "version": "1.0.0",
+  "description": "LawSync Desktop Application",
+  "main": "electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm:dev:server\" \"npm:dev:electron\"",
+    "dev:server": "cd server && npm run start",
+    "dev:electron": "electron .",
+    "build:react": "cd application && npm run build",
+    "build": "npx electron-builder --win nsis --x64 --publish=never"
+  },
+  "author": "Mohamed Salah",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "electron": "^40.0.0",
+    "electron-builder": "^26.4.0"
+  },
+  "build": {
+    "nsis": {
+      "include": "installer.nsi",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "LawSync"
+    },
+    "appId": "com.lawsync.desktop",
+    "productName": "LawSync",
+    "asar": true,
+    "files": [
+      "electron/**/*",
+      "application/dist/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "server/server.exe",
+        "to": "server/server.exe"
+      },
+      {
+        "from": "electron/bin/mongo",
+        "to": "bin/mongo"
+      }
+    ],
+    "win": {
+      "icon": "electron/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  }
+}
