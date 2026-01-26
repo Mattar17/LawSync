@@ -7,6 +7,9 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
+server/.env
+application/.env
+application/.env.*
 
 dist/
 build/
