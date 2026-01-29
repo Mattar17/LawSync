@@ -25,8 +25,9 @@ export const ChangePassword = async function (req, res) {
   else {
     const newPasswordHash = await bcrypt.hash(newPassword, 12);
     await PasswordDoc.updateOne({
-      mainPassword: newPasswordHash,
-      backupPassowrd: passwords.backupPassword,
+      $set: {
+        mainPassword: newPasswordHash,
+      },
     });
     return res.status(200).json({ status: "success" });
   }

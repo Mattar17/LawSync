@@ -50,7 +50,7 @@ export default function UpdateCase({ handleCasesChanged }) {
   };
 
   return (
-    <div className="case_card min-h-[91vh] mx-auto w-full p-12 shadow-lg">
+    <div className="case_card min-h-[92vh] mx-auto w-full p-12 shadow-lg">
       <CaseInfoInputs
         handleSubmit={handleSubmit}
         formData={formData}

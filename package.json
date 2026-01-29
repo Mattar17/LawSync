@@ -31,6 +31,13 @@
     "appId": "com.lawsync.desktop",
     "productName": "LawSync",
     "asar": true,
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Mattar17",
+        "repo": "LawSync"
+      }
+    ],
     "files": [
       "electron/**/*",
       "application/dist/**/*"
@@ -56,5 +63,8 @@
         }
       ]
     }
+  },
+  "dependencies": {
+    "electron-updater": "^6.7.3"
   }
 }

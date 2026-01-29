@@ -1,9 +1,11 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, dialog } from "electron";
 import { spawn } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
 import net from "net";
 import { mkdirSync, existsSync, appendFileSync } from "fs";
+import pkg from "electron-updater";
+const { autoUpdater } = pkg;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -127,10 +129,32 @@ async function startApi() {
   log("API started successfully");
 }
 
+autoUpdater.on("update-available", () => {
+  dialog.showMessageBox({
+    type: "info",
+    title: "Update Available",
+    message: "A new version is downloading...",
+  });
+});
+
+autoUpdater.on("update-downloaded", () => {
+  dialog
+    .showMessageBox({
+      type: "info",
+      title: "Update Ready",
+      message: "Update downloaded. App will restart.",
+      buttons: ["Restart"],
+    })
+    .then(() => {
+      autoUpdater.quitAndInstall();
+    });
+});
+
 app.whenReady().then(async () => {
   startMongo();
   await startApi();
   createWindow();
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 app.on("before-quit", () => {

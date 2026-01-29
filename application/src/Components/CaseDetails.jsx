@@ -307,8 +307,8 @@ function FilePreview({ file, handleDeleteFile }) {
     return (
       <div className="relative w-full h-40 overflow-hidden rounded">
         <button
-          className="absolute top-2 right-2 z-20 text-white bg-black/60 p-1 rounded-full"
-          onClick={() => handleDeleteFile(fileName)}
+          className="cursor-pointer absolute top-2 right-2 z-20 text-white bg-black/60 p-1 rounded-full"
+          onClick={() => handleDeleteFile(fileName, file.newFile)}
         >
           <X size={16} />
         </button>

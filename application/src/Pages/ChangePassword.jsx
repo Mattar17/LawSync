@@ -39,7 +39,8 @@ export default function ChangePassword() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.status === error) setError("something went wrong");
+        console.log(data);
+        if (data.status === "error") setError("something went wrong");
         else {
           setTimeout(() => navigate("/"), 1000);
           setSuccess("Password changed successfully ✅");
@@ -73,7 +74,7 @@ export default function ChangePassword() {
           )}
 
           <input
-            type="text"
+            type="password"
             name="secondPassword"
             placeholder="كلمة المرور الاحتياطية"
             value={formData.secondPassword}
