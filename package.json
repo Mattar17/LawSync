@@ -1,6 +1,6 @@
 {
   "name": "lawsync",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "LawSync Desktop Application",
   "main": "electron/main.js",
   "type": "module",
@@ -9,7 +9,7 @@
     "dev:server": "cd server && npm run start",
     "dev:electron": "electron .",
     "build:react": "cd application && npm run build",
-    "build": "npx electron-builder --win nsis --x64 --publish=never"
+    "build": "npx electron-builder --win nsis --x64 --publish=always"
   },
   "author": "Mohamed Salah",
   "license": "ISC",
