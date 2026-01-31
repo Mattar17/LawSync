@@ -1,3 +1,4 @@
 node_modules/
 cases_files/
-.env
+.env/
+scripts/seedLicenses.js

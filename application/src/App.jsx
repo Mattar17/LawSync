@@ -7,6 +7,7 @@ import UpdateCase from "./Pages/UpdateCase.jsx";
 import Login from "./Pages/Login.jsx";
 import MainLayout from "./Components/MainLayout.jsx";
 import ChangePassword from "./Pages/ChangePassword.jsx";
+import SetupPasswords from "./Pages/SetupPasswords.jsx";
 
 const api_url = import.meta.env.VITE_API_URL;
 
@@ -37,6 +38,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />}></Route>
+        <Route path="/setup-passwords" element={<SetupPasswords />}></Route>
         <Route path="/forget_password" element={<ChangePassword />}></Route>
         <Route
           element={

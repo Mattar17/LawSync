@@ -25,10 +25,11 @@ export default function ChangePassword() {
     setError("");
     setSuccess("");
 
-    if (formData.secondPassword.length < 2) return setError("Invalid Password");
+    if (formData.secondPassword.length < 2)
+      return setError("كلمة المرور غير صحيحة❌");
 
     if (formData.newPassword.length < 6)
-      return setError("Password must be at least 6 characters");
+      return setError("كلمة المرور يجب أن تتكون من 6 حروف علي الأقل❌");
 
     fetch(`${VITE_API_URL}/change_password`, {
       method: "POST",
@@ -40,10 +41,10 @@ export default function ChangePassword() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        if (data.status === "error") setError("something went wrong");
+        if (data.status === "error") setError("كلمة المرور غير صحيحة❌");
         else {
           setTimeout(() => navigate("/"), 1000);
-          setSuccess("Password changed successfully ✅");
+          setSuccess("تم تغيير كلمة المرور بنجاح ✅");
         }
       });
     setFormData({ secondPassword: "", newPassword: "" });

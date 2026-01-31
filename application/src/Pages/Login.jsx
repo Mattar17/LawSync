@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { Eye, EyeClosed } from "lucide-react";
 
@@ -22,7 +22,9 @@ export default function Login() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.status === "success") {
+        if (data.status === "passwords wasn't found")
+          navigate("/setup-passwords");
+        else if (data.status === "success") {
           navigate("/cases");
         } else {
           setError("كلمة المرور غير صحيحة");

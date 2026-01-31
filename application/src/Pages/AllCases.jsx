@@ -5,9 +5,9 @@ export default function AllCases({ Cases, handleCasesChanged }) {
   return (
     <>
       {Cases?.length === 0 ? (
-        <div className="mx-auto flex flex-col items-center justify-center">
-          <h1 className="text-3xl text-blue-300">لا يوجد قضايا</h1>
-          <NavLink className="hover:underline text-blue-300" to="/add">
+        <div className="mx-auto flex flex-col items-center justify-center mt-4">
+          <h1 className="text-xl text-blue-300">لا يوجد قضايا</h1>
+          <NavLink className="hover:underline text-2xl text-blue-300" to="/add">
             إبدأ بإضافة قضية جديدة
           </NavLink>
         </div>

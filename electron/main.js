@@ -133,7 +133,7 @@ autoUpdater.on("update-available", () => {
   dialog.showMessageBox({
     type: "info",
     title: "Update Available",
-    message: "A new version is downloading...",
+    message: "تحديث: إضافة كلمة مرور لمستخدم جديد, برجاء عدم إغلاق النافذة",
   });
 });
 
@@ -142,7 +142,7 @@ autoUpdater.on("update-downloaded", () => {
     .showMessageBox({
       type: "info",
       title: "Update Ready",
-      message: "Update downloaded. App will restart.",
+      message: "تم تحميل التحديث, إضغط لإعادة تشغيل البرنامج",
       buttons: ["Restart"],
     })
     .then(() => {
