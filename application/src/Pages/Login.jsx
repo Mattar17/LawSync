@@ -10,6 +10,13 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   if (import.meta.env.PROD) {
+
+  //     navigate("/activation");
+  //   }
+  // }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 

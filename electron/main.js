@@ -1,11 +1,14 @@
-import { app, BrowserWindow, dialog } from "electron";
+import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import { spawn } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
 import net from "net";
-import { mkdirSync, existsSync, appendFileSync } from "fs";
+import { mkdirSync, existsSync, appendFileSync, readFileSync } from "fs";
 import pkg from "electron-updater";
 const { autoUpdater } = pkg;
+import validateLicense from "./validateLicense.js";
+import handleActivation from "./src/handleActivation.js";
+import handleTrial from "./src/handleTrial.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,7 +21,45 @@ function log(msg) {
   appendFileSync(logPath, `[${new Date().toISOString()}] ${msg}\n`);
 }
 
-function createWindow() {
+const licensePath = path.join(app.getPath("userData"), "license.json");
+
+let activationWindow = null;
+
+function CreateActivationWindow() {
+  activationWindow = new BrowserWindow({
+    width: 520,
+    height: 620,
+    minWidth: 480,
+    minHeight: 580,
+    resizable: false,
+    maximizable: false,
+    minimizable: true,
+    center: true,
+    title: "Activate LawSync",
+    backgroundColor: "#0f172a",
+
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
+
+  activationWindow.loadFile(
+    path.join(__dirname, "../application/dist/index.html"),
+    {
+      hash: "activation",
+    },
+  );
+
+  activationWindow.on("close", (e) => {
+    activationWindow = null;
+  });
+
+  return activationWindow;
+}
+
+function createMainWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 1000,
@@ -36,6 +77,21 @@ function createWindow() {
   win.loadFile(uiPath);
   win.maximize();
 }
+async function checkLicense() {
+  if (!existsSync(licensePath)) return false;
+  const licenseRaw = readFileSync(licensePath);
+  const license = JSON.parse(licenseRaw);
+  const isValid = await validateLicense(license.payload, license.signature);
+  if (!isValid) {
+    console.log("Not Valid License!!!!!!!!!!!💢💥🛑");
+    return false;
+  } else {
+    console.log("Valid All Good 💫✅♻");
+    return true;
+  }
+}
+handleActivation(licensePath, CreateActivationWindow, createMainWindow);
+handleTrial(licensePath, () => activationWindow, createMainWindow);
 
 let mongoProcess;
 let apiProcess;
@@ -88,10 +144,6 @@ function waitForMongo(port = 27017, host = "127.0.0.1") {
   });
 }
 
-const filesStoragePath = isProd
-  ? path.join(app.getPath("userData"), "cases_files")
-  : path.join(__dirname, "cases_files");
-
 async function startApi() {
   log("Waiting for MongoDB...");
   await waitForMongo();
@@ -105,17 +157,9 @@ async function startApi() {
 
   apiProcess = isProd
     ? spawn(apiPath, [], {
-        env: {
-          ...process.env,
-          CASES_ROOT: filesStoragePath,
-        },
         stdio: "pipe",
       })
     : spawn("node", [apiPath], {
-        env: {
-          ...process.env,
-          CASES_ROOT: filesStoragePath,
-        },
         stdio: "pipe",
       });
 
@@ -151,9 +195,16 @@ autoUpdater.on("update-downloaded", () => {
 });
 
 app.whenReady().then(async () => {
-  startMongo();
-  await startApi();
-  createWindow();
+  const activated = await checkLicense();
+
+  if (activated) {
+    startMongo();
+    await startApi();
+    createMainWindow();
+  } else {
+    CreateActivationWindow();
+  }
+
   autoUpdater.checkForUpdatesAndNotify();
 });
 
