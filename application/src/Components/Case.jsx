@@ -10,6 +10,7 @@ import {
   Clock,
   EllipsisVertical,
   ArrowLeft,
+  Calendar,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
@@ -66,7 +67,7 @@ export default function Case({ caseDetails, handleCasesChanged }) {
   return (
     <div
       key={caseDetails.case_id}
-      className="relative case_card border-border rounded-xl shadow-sm p-5 text-[15px] text-right flex flex-col justify-between"
+      className="relative case_card border-border rounded-xl shadow-[0px_1px_4px_rgba(222,222,222,0.6)] p-5 text-[15px] text-right flex flex-col justify-between"
     >
       <div ref={dropdownRef}>
         <button onClick={handleSettingsClick} className="cursor-pointer">
@@ -131,10 +132,34 @@ export default function Case({ caseDetails, handleCasesChanged }) {
 
         <InfoRow
           icon={IdCard}
-          label="الرقم القومي"
+          label="الرقم القومي للموكل"
           value={caseDetails.client_national_id}
         />
 
+        <InfoRow
+          icon={IdCard}
+          label="الرقم القومي للخصم"
+          value={caseDetails.client_opponent_national_id}
+        />
+
+        <InfoRow
+          icon={Calendar}
+          label="تاريخ الجلسة الماضية"
+          value={
+            caseDetails.latest_court_session_date
+              ? `${new Date(caseDetails.latest_court_session_date).toLocaleDateString("ar-EG", { weekday: "long" })}, ${new Date(caseDetails.latest_court_session_date).toLocaleDateString("ar-EG")}`
+              : "غير محدد"
+          }
+        />
+        <InfoRow
+          icon={Calendar}
+          label="تاريخ الجلسة القادمة"
+          value={
+            caseDetails.next_court_session_date
+              ? `${new Date(caseDetails.next_court_session_date).toLocaleDateString("ar-EG", { weekday: "long" })}, ${new Date(caseDetails.next_court_session_date).toLocaleDateString("ar-EG")}`
+              : "غير محدد"
+          }
+        />
         <InfoRow
           icon={FolderClock}
           label="آخر المستجدات"

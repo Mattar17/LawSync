@@ -10,6 +10,7 @@ import {
   FileText,
   ArrowLeft,
   FolderClock,
+  Calendar,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -191,14 +192,40 @@ export default function CaseDetails() {
 
         <Item
           icon={IdCard}
-          label="الرقم القومي"
+          label="الرقم القومي للموكل"
           value={caseDetails.client_national_id}
+        />
+
+        <Item
+          icon={IdCard}
+          label="الرقم القومي للخصم"
+          value={caseDetails.client_opponent_national_id}
         />
 
         <Item
           icon={FolderClock}
           label="آخر المستجدات"
           value={caseDetails.case_status}
+        />
+
+        <Item
+          icon={Calendar}
+          label="تاريخ الجلسة الماضية"
+          value={
+            caseDetails.latest_court_session_date
+              ? `${new Date(caseDetails.latest_court_session_date).toLocaleDateString("ar-EG", { weekday: "long" })}, ${new Date(caseDetails.latest_court_session_date).toLocaleDateString("ar-EG")}`
+              : "غير محدد"
+          }
+        />
+
+        <Item
+          icon={Calendar}
+          label="تاريخ الجلسة القادمة"
+          value={
+            caseDetails.next_court_session_date
+              ? `${new Date(caseDetails.next_court_session_date).toLocaleDateString("ar-EG", { weekday: "long" })}, ${new Date(caseDetails.next_court_session_date).toLocaleDateString("ar-EG")}`
+              : "غير محدد"
+          }
         />
 
         {caseDetails.createdAt && (

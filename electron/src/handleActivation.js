@@ -16,11 +16,12 @@ export default async function handleActivation(
       const machineId = await getMachineId();
 
       const response = await fetch(
-        "http://localhost:8000/api/licenses/activate",
+        "https://law-sync-activation-api.vercel.app/api/licenses/activate",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "x-api-key": process.env.API_KEY,
           },
           body: JSON.stringify({ key, machineId }),
         },
@@ -32,7 +33,7 @@ export default async function handleActivation(
         if (err) {
           console.error("Error writing license file:", err);
         } else {
-          createMainWindow();
+          CreateMainWindow();
           if (activationWindow) activationWindow.close();
         }
       });

@@ -1,159 +1,252 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { caseSchema } from "../validationSchema/caseSchema";
+import { useEffect } from "react";
+
 export default function CaseInfoInputs({
-  handleSubmit,
-  formData,
-  handleChange,
+  submitCase,
   submitLabel,
+  formData,
   disableCaseNumber,
 }) {
   const roles = ["مدعي", "مدعى عليه"];
+  console.log("Received formData in CaseInfoInputs:", formData);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(caseSchema),
+    mode: "onBlur",
+  });
+
+  console.log("Received formData in CaseInfoInputs:", formData);
+
+  useEffect(() => {
+    console.log("Received formData in CaseInfoInputs:", formData);
+    if (formData) reset(formData);
+  }, [formData, reset]);
+
+  const onSubmit = (data) => {
+    console.log("VALID DATA:", data);
+    submitCase(data);
+  };
+
   return (
-    <form className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="w-[45%]">
-          <label className="block mb-1 font-semibold text-blue-300">
-            رقم القضية
-          </label>
-          <input
-            type="text"
-            name="case_number"
-            value={formData.case_number}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-gray-200"
-            required
-            disabled={disableCaseNumber}
-          />
-        </div>
-        <div className="w-[45%]">
-          <label className="block mb-1 font-semibold text-blue-300">لسنة</label>
-          <input
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-gray-200"
-            type="number"
-            id="year"
-            name="case_year"
-            min="1900"
-            max={new Date().getFullYear()}
-            placeholder={new Date().getFullYear()}
-            step="1"
-            value={formData.case_year}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
-      <div className="flex items-center justify-between">
-        <div className="w-[45%]">
-          <label className="block mb-1 font-semibold text-blue-300">
-            اسم العميل
-          </label>
-          <input
-            type="text"
-            name="client_name"
-            value={formData.client_name}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
-            required
-          />
-        </div>
-        <div className="w-[45%]">
-          <label className="block mb-1 font-semibold text-blue-300">
-            دور العميل
-          </label>
-          <select
-            name="client_role"
-            value={formData.client_role}
-            onChange={handleChange}
-            className="w-full border case_card border-gray-300 rounded-lg p-1 focus:outline-none focus:ring-1 focus:ring-gray-400"
-            required
+    <div>
+      {!formData ? (
+        <p>Loading...</p>
+      ) : (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-6"
+          noValidate
+        >
+          <div className="flex items-center justify-between">
+            <div className="w-[45%]">
+              <label className="block mb-1 font-semibold text-blue-300">
+                رقم القضية
+              </label>
+              <input
+                {...register("case_number")}
+                disabled={disableCaseNumber}
+                className="w-full border rounded-lg p-2 focus:ring-1"
+              />
+              {errors.case_number && (
+                <p className="text-red-600 text-sm mt-1">
+                  {errors.case_number.message}
+                </p>
+              )}
+            </div>
+
+            <div className="w-[45%]">
+              <label className="block mb-1 font-semibold text-blue-300">
+                لسنة
+              </label>
+              <input
+                {...register("case_year")}
+                type="text"
+                placeholder={new Date().getFullYear()}
+                className="w-full border rounded-lg p-2 focus:ring-1"
+              />
+              {errors.case_year && (
+                <p className="text-red-600 text-sm mt-1">
+                  {errors.case_year.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="w-[45%]">
+              <label className="block mb-1 font-semibold text-blue-300">
+                اسم العميل
+              </label>
+              <input
+                {...register("client_name")}
+                type="text"
+                className="w-full border rounded-lg p-2 focus:ring-1"
+              />
+              {errors.client_name && (
+                <p className="text-red-600 text-sm mt-1">
+                  {errors.client_name.message}
+                </p>
+              )}
+            </div>
+
+            <div className="w-[45%]">
+              <label className="block mb-1 font-semibold text-blue-300">
+                دور العميل
+              </label>
+              <select
+                {...register("client_role")}
+                className="case_card w-full border rounded-lg p-2 focus:ring-1"
+              >
+                <option value="">اختر الدور</option>
+                {roles.map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </select>
+              {errors.client_role && (
+                <p className="text-red-600 text-sm mt-1">
+                  {errors.client_role.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="w-[45%]">
+              <label className="block mb-1 font-semibold text-blue-300">
+                اسم الخصم
+              </label>
+              <input
+                {...register("client_opponent_name")}
+                type="text"
+                className="w-full border rounded-lg p-2 focus:ring-1"
+              />
+              {errors.client_opponent_name && (
+                <p className="text-red-600 text-sm mt-1">
+                  {errors.client_opponent_name.message}
+                </p>
+              )}
+            </div>
+
+            <div className="w-[45%]">
+              <label className="block mb-1 font-semibold text-blue-300">
+                دور الخصم
+              </label>
+              <select
+                {...register("client_opponent_role")}
+                className="case_card w-full border rounded-lg p-2 focus:ring-1"
+              >
+                <option value="">اختر الدور</option>
+                {roles.map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </select>
+              {errors.client_opponent_role && (
+                <p className="text-red-600 text-sm mt-1">
+                  {errors.client_opponent_role.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <label className="block mb-1 font-semibold text-blue-300">
+              الرقم القومي للموكل
+            </label>
+            <input
+              {...register("client_national_id")}
+              type="text"
+              className="w-full border rounded-lg p-2 focus:ring-1"
+            />
+            {errors.client_national_id && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.client_national_id.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block mb-1 font-semibold text-blue-300">
+              الرقم القومي للخصم
+            </label>
+            <input
+              {...register("client_opponent_national_id")}
+              type="text"
+              className="w-full border rounded-lg p-2 focus:ring-1"
+            />
+            {errors.client_opponent_national_id && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.client_opponent_national_id.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block mb-1 font-semibold text-blue-300">
+              تاريخ الجلسة الماضية
+            </label>
+            <input
+              {...register("latest_court_session_date")}
+              type="date"
+              className="w-full border rounded-lg p-2 focus:ring-1"
+            />
+            {errors.latest_court_session_date && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.latest_court_session_date.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block mb-1 font-semibold text-blue-300">
+              تاريخ الجلسة القادمة
+            </label>
+            <input
+              {...register("next_court_session_date")}
+              type="date"
+              className="w-full border rounded-lg p-2 focus:ring-1"
+            />
+            {errors.next_court_session_date && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.next_court_session_date.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label className="block mb-1 font-semibold text-blue-300">
+              آخر المستجدات
+            </label>
+            <input
+              {...register("case_status")}
+              type="text"
+              className="w-full border rounded-lg p-2 focus:ring-1"
+            />
+            {errors.case_status && (
+              <p className="text-red-600 text-sm mt-1">
+                {errors.case_status.message}
+              </p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full btn font-semibold py-2 rounded-lg transition"
           >
-            <option value="" className="text-gray-400">
-              اختر الدور
-            </option>
-            {roles.map((role) => (
-              <option key={role} value={role}>
-                {role}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="w-[45%]">
-          <label className="block mb-1 font-semibold text-blue-300">
-            اسم الخصم
-          </label>
-          <input
-            type="text"
-            name="client_opponent_name"
-            value={formData.client_opponent_name}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
-            required
-          />
-        </div>
-
-        <div className="w-[45%]">
-          <label className="block mb-1 font-semibold text-blue-300">
-            دور الخصم
-          </label>
-          <select
-            name="client_opponent_role"
-            value={formData.client_opponent_role}
-            onChange={handleChange}
-            className="w-full border case_card border-gray-300 rounded-lg p-1 focus:outline-none focus:ring-1 focus:ring-gray-400"
-            required
-          >
-            <option value="" className="text-gray-400">
-              اختر الدور
-            </option>
-            {roles.map((role) => (
-              <option key={role} value={role}>
-                {role}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div>
-        <label className="block mb-1 font-semibold text-blue-300">
-          الرقم القومي
-        </label>
-        <input
-          type="text"
-          name="client_national_id"
-          value={formData.client_national_id}
-          onChange={handleChange}
-          className="w-full case_card border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
-          required
-          pattern="[0-9]{14}"
-          title="الرقم القومي يجب أن يكون مكوناً من 14 رقم"
-        />
-      </div>
-
-      <div>
-        <label className="block mb-1 font-semibold text-blue-300">
-          آخر المستجدات
-        </label>
-        <input
-          type="text"
-          name="case_status"
-          value={formData.case_status}
-          onChange={handleChange}
-          className="w-full case_card border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-1 focus:ring-gray-400"
-          required
-        />
-      </div>
-
-      <button
-        onClick={handleSubmit}
-        disabled={formData.client_national_id.length !== 14}
-        type="submit"
-        className="w-full btn text-primary font-semibold py-2 rounded-lg hover:bg-gray-600 hover:text-gray-50 transition"
-      >
-        <span className="w-full hover:border-blue-300 hover:border-b-2">
-          {submitLabel}
-        </span>
-      </button>
-    </form>
+            {submitLabel}
+          </button>
+        </form>
+      )}
+    </div>
   );
 }
