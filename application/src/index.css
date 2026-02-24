@@ -14,6 +14,7 @@
     --text-primary: 229 229 229;
     --text-secondary: 179 179 179;
     --border: var(--accent);
+    --shadow: 222 222 222;
   }
 
   [data-theme="light"] {
@@ -26,6 +27,7 @@
 
     --text-primary: 24 24 24;
     --text-secondary: 96 96 96;
+    --shadow: 194 194 194;
   }
 
   [data-theme="dark"] {
@@ -38,6 +40,7 @@
 
     --text-primary: 229 229 229;
     --text-secondary: 179 179 179;
+    --shadow: 222 222 222;
   }
 }
 

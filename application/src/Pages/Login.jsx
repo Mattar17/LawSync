@@ -8,14 +8,35 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  //const [trialStatus, setTrialStatus] = useState(null);
   const navigate = useNavigate();
 
   // useEffect(() => {
-  //   if (import.meta.env.PROD) {
-
-  //     navigate("/activation");
-  //   }
+  //   const trialData = window.activation.checkTrial();
+  //   trialData.then((data) => {
+  //     setTrialStatus(data);
+  //   });
   // }, []);
+
+  // const trialTimeLeft = function () {
+  //   const expirationDate = new Date(trialStatus?.expiresAt);
+  //   const now = new Date();
+
+  //   const diffMs = expirationDate - now;
+
+  //   if (diffMs <= 0) {
+  //     return "Trial expired";
+  //   } else {
+  //     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  //     const diffDays = Math.floor(diffHours / 24);
+
+  //     if (diffDays >= 1) {
+  //       return `متبقي ${diffDays} أيام و ${diffHours % 24} ساعات على انتهاء النسخة التجريبية`;
+  //     } else {
+  //       return `متبقي ${diffHours} ساعات على انتهاء النسخة التجريبية`;
+  //     }
+  //   }
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -40,10 +61,10 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-bg">
       <form
         onSubmit={handleSubmit}
-        className="case_card p-6 rounded-lg shadow-md w-full max-w-sm"
+        className="case_card p-6 rounded-lg shadow-[0px_1px_4px_rgba(222,222,222,0.6)] w-full max-w-sm"
       >
         <img src="LawSync_Logo.png"></img>
 

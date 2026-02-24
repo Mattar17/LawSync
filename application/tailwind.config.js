@@ -12,6 +12,7 @@ export default {
         secondary: "rgb(var(--text-secondary) / <alpha-value>)",
         accent: "rgb(var(--accent) / <alpha-value>)",
         border: "rgb(var(--border) / <alpha-value>)",
+        shadow: "rgb(var(--shadow) / <alpha-value>)",
       },
       fontFamily: {
         arabic: ['"Noto Sans Arabic"', "sans-serif"],

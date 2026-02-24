@@ -9,9 +9,12 @@ const { autoUpdater } = pkg;
 import validateLicense from "./validateLicense.js";
 import handleActivation from "./src/handleActivation.js";
 import handleTrial from "./src/handleTrial.js";
+import checkTrial from "./src/checkTrial.js";
+import dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const isProd = app.isPackaged;
 const resourcesPath = process.resourcesPath;
@@ -67,6 +70,7 @@ function createMainWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
@@ -92,6 +96,7 @@ async function checkLicense() {
 }
 handleActivation(licensePath, CreateActivationWindow, createMainWindow);
 handleTrial(licensePath, () => activationWindow, createMainWindow);
+//checkTrial();
 
 let mongoProcess;
 let apiProcess;

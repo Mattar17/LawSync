@@ -14,6 +14,9 @@ export default function NewCase({ handleCasesChanged }) {
     client_role: "",
     client_opponent_role: "",
     client_national_id: "",
+    client_opponent_national_id: "",
+    latest_court_session_date: "",
+    next_court_session_date: "",
     case_status: "قضية جديدة",
   });
 
@@ -21,21 +24,22 @@ export default function NewCase({ handleCasesChanged }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
+  const handleSubmit = (data) => {
     fetch(VITE_API_URL, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(data),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.status === "success") {
+          console.log("Case added successfully:", data.case);
           handleCasesChanged();
           navigate("/cases");
+        } else {
+          console.error("Error adding case:", data);
         }
       });
   };
@@ -43,7 +47,7 @@ export default function NewCase({ handleCasesChanged }) {
   return (
     <div className="case_card min-h-[92vh] mx-auto w-full p-12 shadow-lg">
       <CaseInfoInputs
-        handleSubmit={handleSubmit}
+        submitCase={handleSubmit}
         formData={formData}
         handleChange={handleChange}
         submitLabel={"إضافة القضية"}

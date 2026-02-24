@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const caseSchema = new mongoose.Schema(
   {
     case_number: {
-      type: Number,
+      type: String,
       required: [true, "رقم القضية مطلوب"],
       unique: true,
     },
@@ -51,6 +51,21 @@ const caseSchema = new mongoose.Schema(
         validator: (v) => v.length === 14,
         message: "الرقم القومي يجب أن يكون 14 رقمًا",
       },
+    },
+    client_opponent_national_id: {
+      type: String,
+      required: [true, "الرقم القومي للخصم مطلوب"],
+      match: [/^[0-9]{14}$/, "الرقم القومي للخصم يجب أن يتكون من 14 رقمًا"],
+      validate: {
+        validator: (v) => v.length === 14,
+        message: "الرقم القومي للخصم يجب أن يكون 14 رقمًا",
+      },
+    },
+    latest_court_session_date: {
+      type: String,
+    },
+    next_court_session_date: {
+      type: String,
     },
 
     case_status: {
