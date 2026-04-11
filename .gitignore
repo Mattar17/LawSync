@@ -4,8 +4,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-.env
-.env.*
 !.env.example
 server/.env
 application/.env
@@ -59,3 +57,4 @@ coverage/
 
 tmp/
 temp/
+config.bat

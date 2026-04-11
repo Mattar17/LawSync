@@ -115,6 +115,7 @@ async function checkLicense() {
 }
 handleActivation(licensePath, () => activationWindow, createMainWindow);
 handleTrial(licensePath, () => activationWindow, createMainWindow);
+//checkTrial();
 
 let mongoProcess;
 let apiProcess;
