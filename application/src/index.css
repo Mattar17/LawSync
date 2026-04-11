@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100..900&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&display=swap");
 @import "tailwindcss";
 
 @layer base {
@@ -49,7 +50,8 @@ html {
 }
 
 body {
-  font-family: "Noto Sans Arabic", "Tajawal", system-ui, sans-serif;
+  font-family:
+    "Markazi Text", "Tajawal", "Noto Sans Arabic", system-ui, sans-serif;
   background-color: rgb(var(--bg));
   color: rgb(var(--text-primary));
   line-height: 1.6;
@@ -75,4 +77,9 @@ body {
 
 .menu:hover {
   background-color: rgb(var(--menu));
+}
+
+input:focus {
+  outline: none;
+  box-shadow: none;
 }

@@ -11,6 +11,7 @@ import {
   EllipsisVertical,
   ArrowLeft,
   Calendar,
+  NotebookPen,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
@@ -171,9 +172,14 @@ export default function Case({ caseDetails, handleCasesChanged }) {
           label="تاريخ الإنشاء"
           value={new Date(caseDetails.createdAt).toLocaleDateString("ar-EG")}
         />
+
+        <InfoRow
+          icon={NotebookPen}
+          label="ملاحظات إضافية"
+          value={caseDetails.case_notes}
+        />
       </div>
 
-      {/* Details Link */}
       <div className="mt-4">
         <button
           onClick={() =>

@@ -75,7 +75,7 @@ export default function Navbar({ setSearchQuery, searchQuery }) {
         </button>
 
         <NavLink
-          to="/change_password"
+          to="/settings"
           className="cursor-pointer p-4 transition-transform duration-300 hover:rotate-90 hover:text-blue-300"
         >
           <Settings />

@@ -48,12 +48,21 @@ function CreateActivationWindow() {
     },
   });
 
-  activationWindow.loadFile(
-    path.join(__dirname, "../application/dist/index.html"),
-    {
+  if (isProd) {
+    const uiPath = path.join(
+      app.getAppPath(),
+      "application",
+      "dist",
+      "index.html",
+    );
+    console.log("Loading:", uiPath);
+    activationWindow.loadFile(uiPath, {
       hash: "activation",
-    },
-  );
+    });
+  } else {
+    activationWindow.loadURL("http://localhost:5173/#activation");
+    activationWindow.webContents.openDevTools();
+  }
 
   activationWindow.on("close", (e) => {
     activationWindow = null;
@@ -74,13 +83,23 @@ function createMainWindow() {
     },
   });
 
-  const uiPath = isProd
-    ? path.join(app.getAppPath(), "application", "dist", "index.html")
-    : path.join(__dirname, "../application/dist/index.html");
-  log("[UI path]" + uiPath);
-  win.loadFile(uiPath);
+  if (isProd) {
+    const uiPath = path.join(
+      app.getAppPath(),
+      "application",
+      "dist",
+      "index.html",
+    );
+    log("[UI path] " + uiPath);
+    win.loadFile(uiPath);
+  } else {
+    win.loadURL("http://localhost:5173");
+    win.webContents.openDevTools();
+  }
+
   win.maximize();
 }
+
 async function checkLicense() {
   if (!existsSync(licensePath)) return false;
   const licenseRaw = readFileSync(licensePath);
@@ -94,9 +113,8 @@ async function checkLicense() {
     return true;
   }
 }
-handleActivation(licensePath, CreateActivationWindow, createMainWindow);
+handleActivation(licensePath, () => activationWindow, createMainWindow);
 handleTrial(licensePath, () => activationWindow, createMainWindow);
-//checkTrial();
 
 let mongoProcess;
 let apiProcess;
@@ -149,6 +167,14 @@ function waitForMongo(port = 27017, host = "127.0.0.1") {
   });
 }
 
+function readBSONFile() {
+  const bsonPath = path.join(app.getPath("userData"), "db", "storage.bson");
+  if (!existsSync(bsonPath))
+    console.log("BSON file does not exist at: " + bsonPath);
+  const bsonData = readFileSync(bsonPath);
+  console.log("[BSON Data] " + bsonData);
+}
+
 async function startApi() {
   log("Waiting for MongoDB...");
   await waitForMongo();
@@ -182,7 +208,7 @@ autoUpdater.on("update-available", () => {
   dialog.showMessageBox({
     type: "info",
     title: "Update Available",
-    message: "تحديث: إضافة كلمة مرور لمستخدم جديد, برجاء عدم إغلاق النافذة",
+    message: "تحديث : إصلاحات في نافذة التفعيل، جاري التحميل.......",
   });
 });
 
@@ -201,6 +227,7 @@ autoUpdater.on("update-downloaded", () => {
 
 app.whenReady().then(async () => {
   const activated = await checkLicense();
+  readBSONFile();
 
   if (activated) {
     startMongo();

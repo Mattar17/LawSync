@@ -1,9 +1,9 @@
 import { ipcMain } from "electron";
 import getMachineId from "./getMachineId.js";
-import { appendFileSync } from "fs";
+import { writeFileSync } from "fs";
 import dotenv from "dotenv";
 dotenv.config();
-
+//"https://law-sync-activation-api.vercel.app/api/licenses/trial/start"
 export default async function handleTrialCreation(
   licensePath,
   getActivationWindow,
@@ -23,13 +23,16 @@ export default async function handleTrialCreation(
       },
     );
     const data = await res.json();
-    if (res.status === 206) return "Trial already used on this machine";
+    if (!data.success) {
+      return "expired";
+    }
     if (data.success) {
       const licenseData = JSON.stringify(data.data);
-      appendFileSync(licensePath, licenseData);
+      writeFileSync(licensePath, licenseData);
       createMainWindow();
       const win = getActivationWindow();
       if (win) win.close();
+      return "Trial started successfully";
     }
   });
 }

@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { ClipLoader } from "react-spinners";
+import { ClipLoader, PulseLoader } from "react-spinners";
 
 export default function Activation() {
   const [key, setKey] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isTrialLoading, setIsTrialLoading] = useState(false);
 
   const messageTextColor = error ? "text-red-600" : "text-green-600";
 
   const handleActivate = async () => {
+    console.log("handleActivate started....");
     setIsLoading(true);
     let controller = new AbortController();
 
@@ -17,19 +19,20 @@ export default function Activation() {
 
     try {
       let response = await fetch(
-        "http://localhost:8000/api/licenses/validate",
+        "https://law-sync-activation-api.vercel.app/api/licenses/validate",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            apiKey: import.meta.env.VITE_API_KEY,
+            "x-api-key": import.meta.env.VITE_API_KEY,
           },
           body: JSON.stringify({ key }),
           signal: controller.signal,
         },
       );
       const data = await response.json();
-      if (data.success === "true") {
+      console.log("Activation API response:", data);
+      if (data.success) {
         setError(false);
         setMessage("تم تفعيل البرنامج بنجاح ✅");
         await window.activation.activate(data.data);
@@ -43,12 +46,18 @@ export default function Activation() {
   };
 
   const startTrial = async () => {
+    setIsTrialLoading(true);
     const result = await window.activation.startTrial();
-    if (result === "Trial already used on this machine") {
+    if (result === "expired") {
       setMessage("لقد تم استخدام النسخة التجريبية مسبقًا على هذا الجهاز");
-    } else {
+      setIsTrialLoading(false);
+    } else if (result === "Trial started successfully") {
       setError(false);
       setMessage("تم تفعيل النسخة التجريبية بنجاح ✅");
+      setIsTrialLoading(false);
+    } else {
+      setMessage("حدث خطأ أثناء تفعيل النسخة التجريبية ❌");
+      setIsTrialLoading(false);
     }
   };
 
@@ -84,14 +93,16 @@ export default function Activation() {
         </button>
 
         <div className="mt-6 flex flex-col gap-2">
-          <span className="text-xs text-slate-400">
-            ليس لديك يوجد مفتاح تفعيل؟
-          </span>
+          <span className="text-xs text-slate-400">ليس لديك مفتاح تفعيل؟</span>
           <button
             onClick={startTrial}
             className="cursor-pointer text-sm text-sky-400 hover:text-sky-300 transition"
           >
-            تفعيل النسخة التجريبية المجانية
+            {isTrialLoading ? (
+              <PulseLoader color="#38BDF8" size={12} />
+            ) : (
+              "تفعيل النسخة التجريبية المجانية"
+            )}
           </button>
         </div>
       </div>

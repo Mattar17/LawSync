@@ -50,70 +50,61 @@ export default function SetupPasswords() {
   };
 
   return (
-    <div className="h-screen bg-bg flex flex-col overflow-hidden">
-      <div className="flex items-center gap-2 px-6 pt-6 text-secondary">
-        <NavLink to="/" className="flex items-center gap-2 hover:text-blue-300">
-          <ArrowLeft size={26} />
-          <span>الرجوع إلي صفحة التسجيل</span>
-        </NavLink>
-      </div>
+    <div className="bg-bg flex flex-col overflow-hidden shadow-[0_0_10px_0_rgba(0,0,0,0.2)] max-w-sm rounded-2xl">
+      <form
+        onSubmit={handleSubmit}
+        className="case_card px-15 py-12 rounded-xl w-full max-w-sm
+                 flex flex-col gap-6"
+      >
+        <h2 className="text-2xl font-semibold text-center mb-2">
+          إعداد كلمة المرور
+        </h2>
 
-      <div className="flex-1 flex items-center justify-center">
-        <form
-          onSubmit={handleSubmit}
-          className="case_card px-15 py-12 rounded-xl shadow-lg w-full max-w-sm
-                 flex flex-col gap-6 min-h-120"
-        >
-          <h2 className="text-2xl font-semibold text-center mb-2">
-            إضافة كلمة مرور لمستخدم جديد
-          </h2>
+        {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+        {success && (
+          <p className="text-green-600 text-sm text-center">{success}</p>
+        )}
 
-          {error && <p className="text-red-600 text-sm text-center">{error}</p>}
-          {success && (
-            <p className="text-green-600 text-sm text-center">{success}</p>
-          )}
-
-          <input
-            type="password"
-            name="backupPassword"
-            placeholder="كلمة المرور الاحتياطية"
-            value={formData.backupPassword}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3
+        <input
+          type="password"
+          name="backupPassword"
+          placeholder="كلمة المرور الاحتياطية"
+          value={formData.backupPassword}
+          onChange={handleChange}
+          className="w-full border rounded-lg px-4 py-3
                    focus:outline-none focus:ring"
+        />
+
+        <div className="flex items-center gap-3">
+          <input
+            name="mainPassword"
+            type={showPassword ? "text" : "password"}
+            placeholder="كلمة المرور الجديدة"
+            value={formData.mainPassword}
+            onChange={handleChange}
+            className="flex-1 border rounded-lg px-9 py-3
+                     focus:outline-none focus:ring"
           />
 
-          <div className="flex items-center gap-3">
-            <input
-              name="mainPassword"
-              type={showPassword ? "text" : "password"}
-              placeholder="كلمة المرور الجديدة"
-              value={formData.mainPassword}
-              onChange={handleChange}
-              className="flex-1 border rounded-lg px-9 py-3
-                     focus:outline-none focus:ring"
-            />
-
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className={`cursor-pointer p-2 rounded-lg transition ${
-                showPassword ? "text-blue-300" : "text-gray-400"
-              }`}
-            >
-              {showPassword ? <Eye /> : <EyeClosed />}
-            </button>
-          </div>
-
           <button
-            type="submit"
-            className="mt-24 w-full bg-blue-300 text-white py-3 rounded-lg
-                   hover:opacity-90 text-lg"
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className={`cursor-pointer p-2 rounded-lg transition ${
+              showPassword ? "text-blue-300" : "text-gray-400"
+            }`}
           >
-            تغيير كلمة المرور
+            {showPassword ? <Eye /> : <EyeClosed />}
           </button>
-        </form>
-      </div>
+        </div>
+
+        <button
+          type="submit"
+          className="mt-24 w-full bg-blue-300 text-white py-3 rounded-lg
+                   hover:opacity-90 text-lg"
+        >
+          تغيير كلمة المرور
+        </button>
+      </form>
     </div>
   );
 }

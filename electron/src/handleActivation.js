@@ -1,6 +1,6 @@
 import getMachineId from "./getMachineId.js";
 import { ipcMain } from "electron";
-import { appendFile } from "fs";
+import { writeFile } from "fs";
 
 export default async function handleActivation(
   licensePath,
@@ -9,10 +9,11 @@ export default async function handleActivation(
 ) {
   ipcMain.handle("successfullActivation", async (_event, licenseData) => {
     try {
-      if (!licenseData?.payload || !licenseData?.signature)
-        throw new Error("invalid license");
+      console.log("Activation channel is Working...");
+      console.log(licenseData);
+      if (!licenseData) throw new Error("invalid license");
 
-      const { key } = licenseData.payload;
+      const { key } = licenseData;
       const machineId = await getMachineId();
 
       const response = await fetch(
@@ -29,12 +30,13 @@ export default async function handleActivation(
       const data = await response.json();
       licenseData = data.data;
 
-      appendFile(licensePath, JSON.stringify(licenseData), (err) => {
+      writeFile(licensePath, JSON.stringify(licenseData), (err) => {
         if (err) {
           console.error("Error writing license file:", err);
         } else {
           CreateMainWindow();
-          if (activationWindow) activationWindow.close();
+          const win = activationWindow();
+          if (win) win.close();
         }
       });
       return licenseData;

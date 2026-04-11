@@ -38,14 +38,14 @@ export const caseSchema = z.object({
     .length(14, "الرقم القومي للخصم يجب أن يتكون من 14 رقمًا")
     .regex(numbersOnlyRegex, "الرقم القومي للخصم يجب أن يحتوي على أرقام فقط"),
 
-  latest_court_session_date: z.string().refine((date) => {
+  latest_court_session_date: z.date().refine((date) => {
     if (!date) return true;
 
     const parsedDate = new Date(date);
     return !isNaN(parsedDate.getTime());
   }, "تاريخ الجلسة الماضية غير صحيح"),
 
-  next_court_session_date: z.string().refine((date) => {
+  next_court_session_date: z.date().refine((date) => {
     if (!date) return true;
     const parsedDate = new Date(date);
     return !isNaN(parsedDate.getTime());
@@ -57,5 +57,12 @@ export const caseSchema = z.object({
     .refine(
       (val) => val.trim().split(/\s+/).length <= 100,
       "حالة القضية يجب ألا تتجاوز 100 كلمة",
+    ),
+  case_notes: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || val.trim().split(/\s+/).length <= 500,
+      "ملاحظات القضية يجب ألا تتجاوز 500 كلمة",
     ),
 });

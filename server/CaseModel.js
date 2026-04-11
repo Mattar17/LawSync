@@ -72,6 +72,9 @@ const caseSchema = new mongoose.Schema(
       type: String,
       default: "قضية جديدة",
     },
+    case_notes: {
+      type: String,
+    },
   },
   {
     timestamps: true,
