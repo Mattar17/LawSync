@@ -46,15 +46,15 @@ export default function SetupPasswords() {
           setSuccess("تم إضافة كلمة السر بنجاح✅");
         }
       });
+
     setFormData({ backupPassword: "", mainPassword: "" });
   };
 
   return (
-    <div className="bg-bg flex flex-col overflow-hidden shadow-[0_0_10px_0_rgba(0,0,0,0.2)] max-w-sm rounded-2xl">
+    <div className="m-auto translate-y-1/2 bg-bg flex flex-col overflow-hidden shadow-[0_0_10px_0_rgba(0,0,0,0.2)] max-w-sm rounded-2xl">
       <form
         onSubmit={handleSubmit}
-        className="case_card px-15 py-12 rounded-xl w-full max-w-sm
-                 flex flex-col gap-6"
+        className="case_card px-15 py-12 rounded-xl w-full max-w-sm flex flex-col gap-6"
       >
         <h2 className="text-2xl font-semibold text-center mb-2">
           إعداد كلمة المرور
@@ -71,36 +71,34 @@ export default function SetupPasswords() {
           placeholder="كلمة المرور الاحتياطية"
           value={formData.backupPassword}
           onChange={handleChange}
-          className="w-full border rounded-lg px-4 py-3
-                   focus:outline-none focus:ring"
+          className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring"
         />
 
-        <div className="flex items-center gap-3">
+        {/* ✅ Fixed password field */}
+        <div className="relative">
           <input
             name="mainPassword"
             type={showPassword ? "text" : "password"}
             placeholder="كلمة المرور الجديدة"
             value={formData.mainPassword}
             onChange={handleChange}
-            className="flex-1 border rounded-lg px-9 py-3
-                     focus:outline-none focus:ring"
+            className="w-full border rounded-lg px-4 py-3 pr-10 focus:outline-none focus:ring"
           />
 
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className={`cursor-pointer p-2 rounded-lg transition ${
+            className={`absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer transition ${
               showPassword ? "text-blue-300" : "text-gray-400"
             }`}
           >
-            {showPassword ? <Eye /> : <EyeClosed />}
+            {showPassword ? <Eye size={18} /> : <EyeClosed size={18} />}
           </button>
         </div>
 
         <button
           type="submit"
-          className="mt-24 w-full bg-blue-300 text-white py-3 rounded-lg
-                   hover:opacity-90 text-lg"
+          className="mt-24 w-full bg-blue-300 text-white py-3 rounded-lg hover:opacity-90 text-lg"
         >
           تغيير كلمة المرور
         </button>

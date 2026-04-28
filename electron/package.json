@@ -4,7 +4,7 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "start": "electron ."
+    "start": "node init && electron ."
   },
   "dependencies": {
     "crypto": "^1.0.1",
