@@ -6,7 +6,7 @@
   "bin": "dist/bundle.cjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js",
+    "start": "node api.js && nodemon src/index.js",
     "build:bundle": "esbuild index.js --bundle --platform=node --format=cjs --outfile=dist/bundle.cjs",
     "build": "pkg dist/bundle.cjs --outputPath build/server --targets node22.22.0-win-x64 --output server.exe"
   },
