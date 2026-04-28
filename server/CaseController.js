@@ -6,7 +6,9 @@ import CaseModel from "./CaseModel.js";
 const getAllCases = async function (req, res) {
   console.log(process.env.CASES_ROOT);
   try {
-    const Cases = await CaseModel.find({}).sort({ createdAt: -1 });
+    const Cases = await CaseModel.find({})
+      .select("-__v")
+      .sort({ createdAt: -1 });
 
     if (!Cases)
       return (

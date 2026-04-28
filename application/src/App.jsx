@@ -9,6 +9,7 @@ import MainLayout from "./Components/MainLayout.jsx";
 import ChangePassword from "./Pages/ChangePassword.jsx";
 import Activation from "./Pages/Activation.jsx";
 import Settings from "./Pages/Settings.jsx";
+import SetupPasswords from "./Pages/SetupPasswords.jsx";
 
 const api_url = import.meta.env.VITE_API_URL;
 
@@ -28,7 +29,6 @@ function App() {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.data);
         if (data.status === "success") {
           setCases(data.data);
         }
@@ -42,6 +42,7 @@ function App() {
         <Route path="/settings" element={<Settings cases={Cases} />}></Route>
         <Route path="/forget_password" element={<ChangePassword />}></Route>
         <Route path="/activation" element={<Activation />} />
+        <Route path="/setup_passwords" element={<SetupPasswords />} />
         <Route
           element={
             <MainLayout
@@ -65,7 +66,6 @@ function App() {
             path="case/update/:case_id"
             element={<UpdateCase handleCasesChanged={handleCasesChanged} />}
           />
-          <Route path="/change_password" element={<ChangePassword />} />
         </Route>
       </Routes>
     </Router>

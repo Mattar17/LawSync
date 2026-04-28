@@ -17,6 +17,7 @@ import {
 } from "./CaseController.js";
 import { CheckPassword, ChangePassword, setPasswords } from "./Login.js";
 import multer from "multer";
+import ResetPassword from "./ResetPassword.js";
 const upload = multer();
 const LOCAL_CONNECTION_STRING = "mongodb://127.0.0.1:27017/lawsync";
 const PORT = 5000;
@@ -54,6 +55,7 @@ app.delete("/delete-file/:case_id/:file_name", deleteFile);
 app.post("/login", CheckPassword);
 app.post("/change_password", ChangePassword);
 app.post("/set-passwords", setPasswords);
+app.post("/reset-password", ResetPassword);
 
 app.listen(PORT, () => {
   console.log("server is running");
