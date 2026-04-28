@@ -45,6 +45,7 @@ export default function Case({ caseDetails, handleCasesChanged }) {
   };
 
   const handleConfirm = () => {
+    console.log(caseDetails);
     const caseId = caseDetails._id;
     console.log(caseId);
 

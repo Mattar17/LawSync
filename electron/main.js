@@ -186,6 +186,7 @@ async function startApi() {
     : path.join(__dirname, "../server/index.js");
 
   log("API path: " + apiPath);
+  console.log("Loading api process from : ", apiPath);
 
   apiProcess = isProd
     ? spawn(apiPath, [], {
